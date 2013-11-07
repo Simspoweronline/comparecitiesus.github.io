@@ -1,3 +1,15 @@
-body {
-  padding-top: 50px;
+.search-row {
+  margin-bottom: 30px;
+}
+
+.main-header {
+  height: 65px;
+}
+
+.search-panel {
+  background: #c2c2c2;
+  padding-top: 145px;
+  height: 400px;
+  left: 50%;
+  top: 50%;
 }
