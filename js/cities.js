@@ -262,6 +262,15 @@ $(document).ready(function() {
     { id: 259, name: "Yonkers, New York"}
   ];
 
-  $("#searchbar").tokenInput(cities);
+  options = { 
+    hintText: "Type in a city", 
+    animateDropdown: false,
+    searchDelay: 200,
+    tokenLimit: 3,
+    resultsLimit: 5,
+    preventDuplicates: true,
+  };
+
+  $("#searchbar").tokenInput(cities, options);
 });
 
