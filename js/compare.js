@@ -20,6 +20,8 @@ $(function() {
   }
 
   var cities = getParameterByName("compare", document.URL).split(",");
-  fetchCityData(cities[0], "#city1");
-  fetchCityData(cities[1], "#city2");
+  
+  for (var i = 0; i < cities.length; i++) {
+    fetchCityData(cities[i], "#city" + (i + 1));
+  }
 });
