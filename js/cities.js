@@ -1,4 +1,16 @@
 $(document).ready(function() {
+  function addCommas(nStr) {
+    nStr += '';
+    x = nStr.split('.');
+    x1 = x[0];
+    x2 = x.length > 1 ? '.' + x[1] : '';
+    var rgx = /(\d+)(\d{3})/;
+    while (rgx.test(x1)) {
+      x1 = x1.replace(rgx, '$1' + ',' + '$2');
+    }
+    return x1 + x2;
+  }
+
   function fetchCityData(cityId) {
     var cityUrl = "data/cities/" + cityId + ".json";
     var ids = ["city-name", "city-population", "city-violent-crime",
@@ -13,6 +25,11 @@ $(document).ready(function() {
       for (var i = 0; i < fields.length; i++) {
         var property = fields[i];
         var value = data[property]
+        
+        if (typeof value === "number") {
+          value = addCommas(value);
+        }
+
         var el = "<td class='" + data.id + "'>" + value + "</td>;"
         $(el).appendTo("#" + ids[i]);
       }
