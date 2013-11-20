@@ -1,4 +1,24 @@
 $(document).ready(function() {
+  function fetchCityData(cityId) {
+    var cityUrl = "data/cities/" + cityId + ".json";
+    var ids = ["city-name", "city-population", "city-violent-crime",
+            "city-rape", "city-murders", "city-robbery", 
+            "city-vehicle-theft"];
+    var fields = ["name", "population", "violent crime",
+            "forcible rape", "murder and nonnegligent manslaughter",
+            "robbery", "vehicle-theft"];
+    var template = "<td>{0}</td>";
+
+    $.getJSON(cityUrl, function(data) {
+      for (var i = 0; i < fields.length; i++) {
+        var property = fields[i];
+        var value = data[property]
+        var el = "<td class='" + data.id + "'>" + value + "</td>;"
+        $(el).appendTo("#" + ids[i]);
+      }
+    });  
+  };
+
   var cities = [
     { num: 1, city: "New York, New York", id: "new_york_new_york" },
     { num: 2, city: "Los Angeles, California", id: "los_angeles_california" },
@@ -302,14 +322,24 @@ $(document).ready(function() {
     { num: 300, city: "Roanoke, Virginia", id: "roanoke_virginia" },
 ];
 
+  function addCity(city) {
+    fetchCityData(city.id);
+  };
+
+  function deleteCity(city) {
+    $("." + city.id).remove(); 
+  };
+
   options = { 
     hintText: "Type in a city", 
     animateDropdown: false,
     searchDelay: 100,
-    tokenLimit: 3,
+    tokenLimit: 4,
     resultsLimit: 5,
     preventDuplicates: true,
-    propertyToSearch: "city"
+    propertyToSearch: "city",
+    onAdd: addCity,
+    onDelete: deleteCity
   };
 
   $("#searchbar").tokenInput(cities, options);
