@@ -26,20 +26,48 @@
   <div class="search-panel">
    <form class="container" action="citycomparison.html" method="get">
       <div class="row search-row">
-        <div class="col-md-6 col-md-offset-3">
+        <div class="col-md-8 col-md-offset-2">
           <input id="searchbar" type="text" name="compare" class="form-control"></input>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-md-2 col-md-offset-3">
-          <input type="submit" class="btn btn-block btn-lg btn-primary" value="Compare">
         </div>
       </div>
     </form>
   </div>
 
   <div class="container">
+    <div id="cities" class="row">
+  <br/>
+      <table class="table table-striped">
+        <tbody>
+          <tr id="city-name">
+            <th scope="row">City</th>
+          </tr>
+
+          <tr id="city-population">
+            <th scope="row">Population</th>
+          </tr>
+
+          <tr id="city-violent-crime">
+            <th scope="row">Violent Crime</th>
+          </tr>
+
+          <tr id="city-rape">
+            <th scope="row">Forcible Rape</th>
+          </tr>
+
+          <tr id="city-murders">
+            <th scope="row">Murders</th>
+          </tr>
+
+          <tr id="city-robbery">
+            <th scope="row">Robbery</th>
+          </tr>
+
+          <tr id="city-vehicle-theft">
+            <th scope="row">Vehicle Theft</th>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <div class="row">
       <div class="col-md-6">
         <h3>Top Comparisons</h3>
@@ -68,5 +96,6 @@
   <script src="js/bootstrap.min.js"></script>
   <script src="js/jquery.tokeninput.js"></script>
   <script src="js/cities.js"></script>
+  <script src="js/compare.js"></script>
 </body>
 </html>
