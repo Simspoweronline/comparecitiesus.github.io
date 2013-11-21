@@ -1,15 +1,14 @@
-.search-row {
-  margin-bottom: 30px;
+#header {
+  background: #f8f8f8;
 }
 
-.main-header {
-  height: 65px;
+#search-panel {
+  padding: 40px 0;
+  height: 200px;
 }
 
-.search-panel {
-  background: #c2c2c2;
-  padding-top: 145px;
-  height: 400px;
-  left: 50%;
-  top: 50%;
+#cities {
+  display: none;
+  margin-top: 20px;
 }
+
