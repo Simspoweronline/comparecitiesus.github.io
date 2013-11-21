@@ -1,76 +1,76 @@
 import json
 import re
 
-def sanitize_name(city_name):
-  alpha_only = re.sub("[.\'\"]", "", city_name.lower())
-  city_id = re.sub("[- ]", "_", alpha_only)
-  return city_id
+CITY_FILENAME = "cities.json"
+STATE_DATA_FOLDER = "fbi"
 
-def generate_city_id(city, state):
-  city_token = sanitize_name(city)
-  state_token = sanitize_name(state)
-  city_id = "%s_%s" % (city_token, state_token)
-  return city_id
-
-def load_state_data(state):
-  STATE_DATA_FOLDER = "fbi"
+def load_fbi_state_stats(state):
   state_filename = "%s/%s.json" % (STATE_DATA_FOLDER, state)
-
-  try:
-    state_file = open(state_filename)
-  except IOError:
-    return None
-
+  state_file = open(state_filename)
   return json.load(state_file)
 
 def extract_city(city_name, state_data):
   target_city_token = sanitize_name(city_name)
 
-  for city in state_data:
-    current_city_token = sanitize_name(city['name'])
+  for current_city in state_data:
+    current_city_token = sanitize_name(current_city['name'])
 
     if current_city_token.startswith(target_city_token):
-      return city
+      return current_city
 
-  return None
+def sanitize_name(city_name):
+  name_without_punctuation = re.sub("[.\'\"]", "", city_name.lower())
+  return re.sub("[- ]", "_", name_without_punctuation)
 
-def load_city_data(city_name, state):
+def generate_city_id(city, state):
+  city_token = sanitize_name(city)
+  state_token = sanitize_name(state)
+
+  city_id = "%s_%s" % (city_token, state_token)
+  return city_id
+
+def load_city(city_name, state):
   city_id = generate_city_id(city_name, state)
-  state_data = load_state_data(state)
+  state_data = load_fbi_state_stats(state)
 
-  if not state_data:
-    return None
+  city = extract_city(city_name, state_data)
 
-  city_data = extract_city(city_name, state_data)
+  if city:
+    city["id"] = city_id
+  else:
+    raise Exception("City not found: %s" % city_name)
 
-  if city_data:
-    city_data["id"] = city_id
+  return city
 
-  return city_data
-
-def create_city_file(city_data):
+def save_city(city):
   try:
-    city_id = city_data['id']
+    city_id = city["id"]
     city_filename = "cities/%s.json" % city_id
     city_file = open(city_filename, "w")
-    json.dump(city_data, city_file)
+    json.dump(city, city_file)
     city_file.close()
   except IOError:
     print "Unable to create file for", city_id
 
-if __name__ == "__main__":
-  CITY_FILENAME = "cities.json"
-
+def load_major_cities():
   cities_file = open(CITY_FILENAME)
   cities_json = json.load(cities_file)
+  cities_file.close()
 
-  for city in cities_json:
-    city_name = city['city']
-    state = city['state']
+  return cities_json
 
-    city_data = load_city_data(city_name, state)
+def main():
+  major_cities = load_major_cities()
 
-    if city_data:
-      create_city_file(city_data)
-    else:
+  for current_city in major_cities:
+    city_name = current_city['current_city']
+    state = current_city['state']
+
+    try:
+      city = load_city(city_name, state)
+      save_city(city)
+    except:
       print "No data for %s, %s" % (city_name, state)
+
+if __name__ == "__main__":
+  main()
