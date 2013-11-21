@@ -34,7 +34,10 @@ $(document).ready(function() {
         if (typeof value === "number") {
           value = addCommas(value);
         }
-
+        else if(property == "name") {
+          value = "<a href='" +  data["url"] + "'>" + value + "</a>";
+        }
+        
         var el = "<td class='" + data.id + "'>" + value + "</td>;"
         $(el).appendTo("#" + ids[i]);
       }
