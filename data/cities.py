@@ -5,7 +5,8 @@ CITIES_FILENAME = "majorcities.json"
 MAJOR_CITIES = json.load(open(CITIES_FILENAME))
 
 def sanitizeName(name):
-    alphaOnly = re.sub("[^a-z]", "", name.lower())
+    name = name.lower().replace("st.", "saint")
+    alphaOnly = re.sub("[^a-z]", "", name)
     return alphaOnly
 
 def cityNameEquals(city, otherCity):
