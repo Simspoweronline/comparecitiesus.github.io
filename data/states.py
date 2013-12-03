@@ -24,6 +24,9 @@ def abbreviationToName(abbreviation):
 def nameToAbbrevation(name):
     return NAME_TO_ABBREVIATION.get(name)
 
+def getStates():
+    return ABBREVIATION_TO_NAME.keys()
+
 def getStatesByName():
     return NAME_TO_ABBREVIATION.keys() 
 
