@@ -19,20 +19,9 @@ def sanitizeName(name):
     return alphaOnly
 
 def cityNameEquals(city, otherCity):
-    return sanitizeName(city) == sanitizeName(otherCity)
+    return sanitizeName(otherCity).startswith(sanitizeName(city))
     
-def loadCity(city, state):
-    stateName = states.abbreviationToName(state)
-
-    if not stateName:
-        return
-
-    stateName = stateName.replace(" ", "_")
-    filename = REPORT_PATH % stateName
-
-    workbook = open_workbook(filename)
-    spreadsheet = workbook.sheets()[0]
-
+def searchSpreadsheet(city, spreadsheet):
     for row in range(5, spreadsheet.nrows):
         currentCity = spreadsheet.cell(row, CITY_NAME).value 
 
@@ -43,6 +32,27 @@ def loadCity(city, state):
                 report[FIELDS[col]] = spreadsheet.cell(row, col).value
             
             return report
+
+def loadCity(city, state):
+    stateName = states.abbreviationToName(state)
+
+    if not stateName:
+        return
+
+    try:
+        stateName = stateName.replace(" ", "_")
+        filename = REPORT_PATH % stateName
+
+        workbook = open_workbook(filename)
+        spreadsheet = workbook.sheets()[0]
+        report = searchSpreadsheet(city, spreadsheet)
+        
+        if report:
+            return report
+    except:
+        pass
+
+    raise LookupError(city)
 
 if __name__ == "__main__":
     print loadCity("Miami", "FL")
