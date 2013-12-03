@@ -1,6 +1,6 @@
 import states
+import cities
 from xlrd import open_workbook
-import re
 import os
 
 REPORT_PATH = "fbi/Table_8_Offenses_Known_to_Law_Enforcement_by_%s_by_City_2012.xls"
@@ -14,22 +14,15 @@ FIELDS = [
 
 CITY_NAME = 0
 
-def sanitizeName(name):
-    alphaOnly = re.sub("[^a-z]", "", name.lower())
-    return alphaOnly
+def findCity(city, reports):
+    for row in range(5, reports.nrows):
+        currentCity = reports.cell(row, CITY_NAME).value 
 
-def cityNameEquals(city, otherCity):
-    return sanitizeName(otherCity).startswith(sanitizeName(city))
-    
-def searchSpreadsheet(city, spreadsheet):
-    for row in range(5, spreadsheet.nrows):
-        currentCity = spreadsheet.cell(row, CITY_NAME).value 
-
-        if cityNameEquals(city, currentCity):
+        if cities.cityNameEquals(city, currentCity):
             report = {}
 
-            for col in range(1, spreadsheet.ncols):
-                report[FIELDS[col]] = spreadsheet.cell(row, col).value
+            for col in range(1, reports.ncols):
+                report[FIELDS[col]] = reports.cell(row, col).value
             
             return report
 
@@ -44,8 +37,8 @@ def loadCity(city, state):
         filename = REPORT_PATH % stateName
 
         workbook = open_workbook(filename)
-        spreadsheet = workbook.sheets()[0]
-        report = searchSpreadsheet(city, spreadsheet)
+        reports = workbook.sheets()[0]
+        report = findCity(city, reports)
         
         if report:
             return report
@@ -56,5 +49,4 @@ def loadCity(city, state):
 
 if __name__ == "__main__":
     print loadCity("Miami", "FL")
-    print loadCity("Miami", "FS")
     print loadCity("Chicago", "IL")
