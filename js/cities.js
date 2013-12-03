@@ -1,372 +1,70 @@
 $(document).ready(function() {
-  function addCommas(nStr) {
-    nStr += '';
-    x = nStr.split('.');
-    x1 = x[0];
-    x2 = x.length > 1 ? '.' + x[1] : '';
-    var rgx = /(\d+)(\d{3})/;
+    function addCommas(nStr) {
+        nStr += '';
+        x = nStr.split('.');
+        x1 = x[0];
+        x2 = x.length > 1 ? '.' + x[1] : '';
+        var rgx = /(\d+)(\d{3})/;
 
-    while (rgx.test(x1)) {
-      x1 = x1.replace(rgx, '$1' + ',' + '$2');
+        while (rgx.test(x1)) {
+            x1 = x1.replace(rgx, '$1' + ',' + '$2');
+        }
+
+        return x1 + x2;
     }
 
-    return x1 + x2;
-  }
+    function fetchCityData(cityId) {
+        var cityUrl = "data/cities/" + cityId + ".json";
 
-  function fetchCityData(cityId) {
-    var cityUrl = "data/cities/" + cityId + ".json";
+        $.getJSON(cityUrl, function(data) {
+            $("#cities").show();
 
-    $.getJSON(cityUrl, function(data) {
-      $("#cities").show();
+            var ids = ["city-name", "city-population", "city-violent-crime",
+            "city-rape", "city-murders", "city-robbery", 
+            "city-vehicle-theft"];
 
-      var ids = ["city-name", "city-population", "city-violent-crime",
-              "city-rape", "city-murders", "city-robbery", 
-              "city-vehicle-theft"];
+            var fields = ["name", "population", "violent crime",
+            "forcible rape", "murder and nonnegligent manslaughter",
+            "robbery", "vehicle-theft"];
 
-      var fields = ["name", "population", "violent crime",
-              "forcible rape", "murder and nonnegligent manslaughter",
-              "robbery", "vehicle-theft"];
+            for (var i = 0; i < fields.length; i++) {
+                var property = fields[i];
+                var value = data[property]
 
-      for (var i = 0; i < fields.length; i++) {
-        var property = fields[i];
-        var value = data[property]
-        
-        if (typeof value === "number") {
-          value = addCommas(value);
-        }
-        else if(property == "name") {
-          value = "<a href='" +  data["url"] + "'>" + value + "</a>";
-        }
-        
-        var el = "<td class='" + data.id + "'>" + value + "</td>;"
-        $(el).appendTo("#" + ids[i]);
-      }
-    });  
-  };
+                if (typeof value === "number") {
+                    value = addCommas(value);
+                }
+                else if(property == "name") {
+                    value = "<a href='" +  data["url"] + "'>" + value + "</a>";
+                }
 
-  var cities = [
-    { city: "New York, New York", id: "new_york_new_york" },
-    { city: "Los Angeles, California", id: "los_angeles_california" },
-    { city: "Chicago, Illinois", id: "chicago_illinois" },
-    { city: "Houston, Texas", id: "houston_texas" },
-    { city: "Philadelphia, Pennsylvania", id: "philadelphia_pennsylvania" },
-    { city: "Phoenix, Arizona", id: "phoenix_arizona" },
-    { city: "San Antonio, Texas", id: "san_antonio_texas" },
-    { city: "San Diego, California", id: "san_diego_california" },
-    { city: "Dallas, Texas", id: "dallas_texas" },
-    { city: "San Jose, California", id: "san_jose_california" },
-    { city: "Austin, Texas", id: "austin_texas" },
-    { city: "Jacksonville, Florida", id: "jacksonville_florida" },
-    { city: "Indianapolis, Indiana", id: "indianapolis_indiana" },
-    { city: "San Francisco, California", id: "san_francisco_california" },
-    { city: "Columbus, Ohio", id: "columbus_ohio" },
-    { city: "Fort Worth, Texas", id: "fort_worth_texas" },
-    { city: "Charlotte, North Carolina", id: "charlotte_north_carolina" },
-    { city: "Detroit, Michigan", id: "detroit_michigan" },
-    { city: "El Paso, Texas", id: "el_paso_texas" },
-    { city: "Memphis, Tennessee", id: "memphis_tennessee" },
-    { city: "Boston, Massachusetts", id: "boston_massachusetts" },
-    { city: "Seattle, Washington", id: "seattle_washington" },
-    { city: "Denver, Colorado", id: "denver_colorado" },
-    { city: "Washington, District of Columbia", id: "washington_district_of_columbia" },
-    { city: "Nashville, Tennessee", id: "nashville_tennessee" },
-    { city: "Baltimore, Maryland", id: "baltimore_maryland" },
-    { city: "Louisville,	Kentucky", id: "louisville_kentucky" },
-    { city: "Portland, Oregon", id: "portland_oregon" },
-    { city: "Oklahoma City, Oklahoma", id: "oklahoma_city_oklahoma" },
-    { city: "Milwaukee, Wisconsin", id: "milwaukee_wisconsin" },
-    { city: "Las Vegas, Nevada", id: "las_vegas_nevada" },
-    { city: "Albuquerque, New Mexico", id: "albuquerque_new_mexico" },
-    { city: "Tucson, Arizona", id: "tucson_arizona" },
-    { city: "Fresno, California", id: "fresno_california" },
-    { city: "Sacramento, California", id: "sacramento_california" },
-    { city: "Long Beach, California", id: "long_beach_california" },
-    { city: "Kansas City, Missouri", id: "kansas_city_missouri" },
-    { city: "Mesa, Arizona", id: "mesa_arizona" },
-    { city: "Virginia Beach, Virginia", id: "virginia_beach_virginia" },
-    { city: "Atlanta, Georgia", id: "atlanta_georgia" },
-    { city: "Colorado Springs, Colorado", id: "colorado_springs_colorado" },
-    { city: "Raleigh, North Carolina", id: "raleigh_north_carolina" },
-    { city: "Omaha, Nebraska", id: "omaha_nebraska" },
-    { city: "Miami, Florida", id: "miami_florida" },
-    { city: "Oakland, California", id: "oakland_california" },
-    { city: "Tulsa, Oklahoma", id: "tulsa_oklahoma" },
-    { city: "Minneapolis, Minnesota", id: "minneapolis_minnesota" },
-    { city: "Cleveland, Ohio", id: "cleveland_ohio" },
-    { city: "Wichita, Kansas", id: "wichita_kansas" },
-    { city: "Arlington, Texas", id: "arlington_texas" },
-    { city: "New Orleans, Louisiana", id: "new_orleans_louisiana" },
-    { city: "Bakersfield, California", id: "bakersfield_california" },
-    { city: "Tampa, Florida", id: "tampa_florida" },
-    { city: "Honolulu,	Hawaii", id: "honolulu_hawaii" },
-    { city: "Anaheim, California", id: "anaheim_california" },
-    { city: "Aurora, Colorado", id: "aurora_colorado" },
-    { city: "Santa Ana, California", id: "santa_ana_california" },
-    { city: "St. Louis, Missouri", id: "st_louis_missouri" },
-    { city: "Riverside, California", id: "riverside_california" },
-    { city: "Corpus Christi, Texas", id: "corpus_christi_texas" },
-    { city: "Pittsburgh, Pennsylvania", id: "pittsburgh_pennsylvania" },
-    { city: "Lexington-Fayette, Kentucky", id: "lexington_fayette_kentucky" },
-    { city: "Anchorage, Alaska", id: "anchorage_alaska" },
-    { city: "Stockton, California", id: "stockton_california" },
-    { city: "Cincinnati, Ohio", id: "cincinnati_ohio" },
-    { city: "St. Paul, Minnesota", id: "st_paul_minnesota" },
-    { city: "Toledo, Ohio", id: "toledo_ohio" },
-    { city: "Newark, New Jersey", id: "newark_new_jersey" },
-    { city: "Greensboro, North Carolina", id: "greensboro_north_carolina" },
-    { city: "Plano, Texas", id: "plano_texas" },
-    { city: "Henderson, Nevada", id: "henderson_nevada" },
-    { city: "Lincoln, Nebraska", id: "lincoln_nebraska" },
-    { city: "Buffalo, New York", id: "buffalo_new_york" },
-    { city: "Fort Wayne, Indiana", id: "fort_wayne_indiana" },
-    { city: "Jersey City, New Jersey", id: "jersey_city_new_jersey" },
-    { city: "Chula Vista, California", id: "chula_vista_california" },
-    { city: "Orlando, Florida", id: "orlando_florida" },
-    { city: "St. Petersburg, Florida", id: "st_petersburg_florida" },
-    { city: "Norfolk, Virginia", id: "norfolk_virginia" },
-    { city: "Chandler, Arizona", id: "chandler_arizona" },
-    { city: "Laredo, Texas", id: "laredo_texas" },
-    { city: "Madison, Wisconsin", id: "madison_wisconsin" },
-    { city: "Durham, North Carolina", id: "durham_north_carolina" },
-    { city: "Lubbock, Texas", id: "lubbock_texas" },
-    { city: "Winston-Salem, North Carolina", id: "winston_salem_north_carolina" },
-    { city: "Garland, Texas", id: "garland_texas" },
-    { city: "Glendale, Arizona", id: "glendale_arizona" },
-    { city: "Hialeah, Florida", id: "hialeah_florida" },
-    { city: "Reno, Nevada", id: "reno_nevada" },
-    { city: "Baton Rouge, Louisiana", id: "baton_rouge_louisiana" },
-    { city: "Irvine, California", id: "irvine_california" },
-    { city: "Chesapeake, Virginia", id: "chesapeake_virginia" },
-    { city: "Irving, Texas", id: "irving_texas" },
-    { city: "Scottsdale, Arizona", id: "scottsdale_arizona" },
-    { city: "North Las Vegas, Nevada", id: "north_las_vegas_nevada" },
-    { city: "Fremont, California", id: "fremont_california" },
-    { city: "Gilbert, Arizona", id: "gilbert_arizona" },
-    { city: "San Bernardino, California", id: "san_bernardino_california" },
-    { city: "Boise City, Idaho", id: "boise_city_idaho" },
-    { city: "Birmingham, Alabama", id: "birmingham_alabama" },
-    { city: "Rochester, New York", id: "rochester_new_york" },
-    { city: "Richmond, Virginia", id: "richmond_virginia" },
-    { city: "Spokane, Washington", id: "spokane_washington" },
-    { city: "Des Moines, Iowa", id: "des_moines_iowa" },
-    { city: "Montgomery, Alabama", id: "montgomery_alabama" },
-    { city: "Modesto, California", id: "modesto_california" },
-    { city: "Fayetteville, North Carolina", id: "fayetteville_north_carolina" },
-    { city: "Tacoma, Washington", id: "tacoma_washington" },
-    { city: "Shreveport, Louisiana", id: "shreveport_louisiana" },
-    { city: "Fontana, California", id: "fontana_california" },
-    { city: "Oxnard, California", id: "oxnard_california" },
-    { city: "Aurora, Illinois", id: "aurora_illinois" },
-    { city: "Moreno Valley, California", id: "moreno_valley_california" },
-    { city: "Akron, Ohio", id: "akron_ohio" },
-    { city: "Yonkers, New York", id: "yonkers_new_york" },
-    { city: "Columbus, Georgia", id: "columbus_georgia" },
-    { city: "Augusta-Richmond, Georgia", id: "augusta_richmond_georgia" },
-    { city: "Little Rock, Arkansas", id: "little_rock_arkansas" },
-    { city: "Amarillo, Texas", id: "amarillo_texas" },
-    { city: "Mobile, Alabama", id: "mobile_alabama" },
-    { city: "Huntington Beach, California", id: "huntington_beach_california" },
-    { city: "Glendale, California", id: "glendale_california" },
-    { city: "Grand Rapids, Michigan", id: "grand_rapids_michigan" },
-    { city: "Salt Lake City, Utah", id: "salt_lake_city_utah" },
-    { city: "Tallahassee, Florida", id: "tallahassee_florida" },
-    { city: "Huntsville, Alabama", id: "huntsville_alabama" },
-    { city: "Worcester, Massachusetts", id: "worcester_massachusetts" },
-    { city: "Knoxville, Tennessee", id: "knoxville_tennessee" },
-    { city: "Grand Prairie, Texas", id: "grand_prairie_texas" },
-    { city: "Newport News, Virginia", id: "newport_news_virginia" },
-    { city: "Brownsville, Texas", id: "brownsville_texas" },
-    { city: "Santa Clarita, California", id: "santa_clarita_california" },
-    { city: "Overland Park, Kansas", id: "overland_park_kansas" },
-    { city: "Providence, Rhode Island", id: "providence_rhode_island" },
-    { city: "Jackson, Mississippi", id: "jackson_mississippi" },
-    { city: "Garden Grove, California", id: "garden_grove_california" },
-    { city: "Oceanside, California", id: "oceanside_california" },
-    { city: "Chattanooga, Tennessee", id: "chattanooga_tennessee" },
-    { city: "Fort Lauderdale, Florida", id: "fort_lauderdale_florida" },
-    { city: "Rancho Cucamonga, California", id: "rancho_cucamonga_california" },
-    { city: "Santa Rosa, California", id: "santa_rosa_california" },
-    { city: "Port St. Lucie, Florida", id: "port_st_lucie_florida" },
-    { city: "Ontario, California", id: "ontario_california" },
-    { city: "Tempe, Arizona", id: "tempe_arizona" },
-    { city: "Vancouver, Washington", id: "vancouver_washington" },
-    { city: "Springfield, Missouri", id: "springfield_missouri" },
-    { city: "Cape Coral, Florida", id: "cape_coral_florida" },
-    { city: "Pembroke Pines, Florida", id: "pembroke_pines_florida" },
-    { city: "Sioux Falls, South Dakota", id: "sioux_falls_south_dakota" },
-    { city: "Peoria, Arizona", id: "peoria_arizona" },
-    { city: "Lancaster, California", id: "lancaster_california" },
-    { city: "Elk Grove, California", id: "elk_grove_california" },
-    { city: "Corona, California", id: "corona_california" },
-    { city: "Eugene, Oregon", id: "eugene_oregon" },
-    { city: "Salem, Oregon", id: "salem_oregon" },
-    { city: "Palmdale, California", id: "palmdale_california" },
-    { city: "Salinas, California", id: "salinas_california" },
-    { city: "Springfield, Massachusetts", id: "springfield_massachusetts" },
-    { city: "Pasadena, Texas", id: "pasadena_texas" },
-    { city: "Rockford, Illinois", id: "rockford_illinois" },
-    { city: "Pomona, California", id: "pomona_california" },
-    { city: "Hayward, California", id: "hayward_california" },
-    { city: "Fort Collins, Colorado", id: "fort_collins_colorado" },
-    { city: "Joliet, Illinois", id: "joliet_illinois" },
-    { city: "Escondido, California", id: "escondido_california" },
-    { city: "Kansas City, Kansas", id: "kansas_city_kansas" },
-    { city: "Torrance, California", id: "torrance_california" },
-    { city: "Bridgeport, Connecticut", id: "bridgeport_connecticut" },
-    { city: "Alexandria, Virginia", id: "alexandria_virginia" },
-    { city: "Sunnyvale, California", id: "sunnyvale_california" },
-    { city: "Cary, North Carolina", id: "cary_north_carolina" },
-    { city: "Lakewood, Colorado", id: "lakewood_colorado" },
-    { city: "Hollywood, Florida", id: "hollywood_florida" },
-    { city: "Paterson, New Jersey", id: "paterson_new_jersey" },
-    { city: "Syracuse, New York", id: "syracuse_new_york" },
-    { city: "Naperville, Illinois", id: "naperville_illinois" },
-    { city: "McKinney, Texas", id: "mckinney_texas" },
-    { city: "Mesquite, Texas", id: "mesquite_texas" },
-    { city: "Clarksville, Tennessee", id: "clarksville_tennessee" },
-    { city: "Savannah, Georgia", id: "savannah_georgia" },
-    { city: "Dayton, Ohio", id: "dayton_ohio" },
-    { city: "Orange, California", id: "orange_california" },
-    { city: "Fullerton, California", id: "fullerton_california" },
-    { city: "Pasadena, California", id: "pasadena_california" },
-    { city: "Hampton, Virginia", id: "hampton_virginia" },
-    { city: "McAllen, Texas", id: "mcallen_texas" },
-    { city: "Killeen, Texas", id: "killeen_texas" },
-    { city: "Warren, Michigan", id: "warren_michigan" },
-    { city: "West Valley City, Utah", id: "west_valley_city_utah" },
-    { city: "Columbia, South Carolina", id: "columbia_south_carolina" },
-    { city: "New Haven, Connecticut", id: "new_haven_connecticut" },
-    { city: "Sterling Heights, Michigan", id: "sterling_heights_michigan" },
-    { city: "Olathe, Kansas", id: "olathe_kansas" },
-    { city: "Miramar, Florida", id: "miramar_florida" },
-    { city: "Thousand Oaks, California", id: "thousand_oaks_california" },
-    { city: "Frisco, Texas", id: "frisco_texas" },
-    { city: "Cedar Rapids, Iowa", id: "cedar_rapids_iowa" },
-    { city: "Topeka, Kansas", id: "topeka_kansas" },
-    { city: "Visalia, California", id: "visalia_california" },
-    { city: "Waco, Texas", id: "waco_texas" },
-    { city: "Elizabeth, New Jersey", id: "elizabeth_new_jersey" },
-    { city: "Bellevue, Washington", id: "bellevue_washington" },
-    { city: "Gainesville, Florida", id: "gainesville_florida" },
-    { city: "Simi Valley, California", id: "simi_valley_california" },
-    { city: "Charleston, South Carolina", id: "charleston_south_carolina" },
-    { city: "Carrollton, Texas", id: "carrollton_texas" },
-    { city: "Coral Springs, Florida", id: "coral_springs_florida" },
-    { city: "Stamford, Connecticut", id: "stamford_connecticut" },
-    { city: "Hartford, Connecticut", id: "hartford_connecticut" },
-    { city: "Concord, California", id: "concord_california" },
-    { city: "Roseville, California", id: "roseville_california" },
-    { city: "Thornton, Colorado", id: "thornton_colorado" },
-    { city: "Kent, Washington", id: "kent_washington" },
-    { city: "Lafayette, Louisiana", id: "lafayette_louisiana" },
-    { city: "Surprise, Arizona", id: "surprise_arizona" },
-    { city: "Denton, Texas", id: "denton_texas" },
-    { city: "Victorville, California", id: "victorville_california" },
-    { city: "Evansville, Indiana", id: "evansville_indiana" },
-    { city: "Midland, Texas", id: "midland_texas" },
-    { city: "Santa Clara, California", id: "santa_clara_california" },
-    { city: "Athens, Georgia", id: "athens_georgia" },
-    { city: "Allentown, Pennsylvania", id: "allentown_pennsylvania" },
-    { city: "Abilene, Texas", id: "abilene_texas" },
-    { city: "Beaumont, Texas", id: "beaumont_texas" },
-    { city: "Vallejo, California", id: "vallejo_california" },
-    { city: "Independence, Missouri", id: "independence_missouri" },
-    { city: "Springfield, Illinois", id: "springfield_illinois" },
-    { city: "Ann Arbor, Michigan", id: "ann_arbor_michigan" },
-    { city: "Provo, Utah", id: "provo_utah" },
-    { city: "Peoria, Illinois", id: "peoria_illinois" },
-    { city: "Norman, Oklahoma", id: "norman_oklahoma" },
-    { city: "Berkeley, California", id: "berkeley_california" },
-    { city: "El Monte, California", id: "el_monte_california" },
-    { city: "Murfreesboro, Tennessee", id: "murfreesboro_tennessee" },
-    { city: "Lansing, Michigan", id: "lansing_michigan" },
-    { city: "Columbia, Missouri", id: "columbia_missouri" },
-    { city: "Downey, California", id: "downey_california" },
-    { city: "Costa Mesa, California", id: "costa_mesa_california" },
-    { city: "Inglewood, California", id: "inglewood_california" },
-    { city: "Miami Gardens, Florida", id: "miami_gardens_florida" },
-    { city: "Manchester, New Hampshire", id: "manchester_new_hampshire" },
-    { city: "Elgin, Illinois", id: "elgin_illinois" },
-    { city: "Wilmington, North Carolina", id: "wilmington_north_carolina" },
-    { city: "Waterbury, Connecticut", id: "waterbury_connecticut" },
-    { city: "Fargo, North Dakota", id: "fargo_north_dakota" },
-    { city: "Arvada, Colorado", id: "arvada_colorado" },
-    { city: "Carlsbad, California", id: "carlsbad_california" },
-    { city: "Westminster, Colorado", id: "westminster_colorado" },
-    { city: "Rochester, Minnesota", id: "rochester_minnesota" },
-    { city: "Gresham, Oregon", id: "gresham_oregon" },
-    { city: "Clearwater, Florida", id: "clearwater_florida" },
-    { city: "Lowell, Massachusetts", id: "lowell_massachusetts" },
-    { city: "West Jordan, Utah", id: "west_jordan_utah" },
-    { city: "Pueblo, Colorado", id: "pueblo_colorado" },
-    { city: "San Buenaventura, California", id: "san_buenaventura_california" },
-    { city: "Fairfield, California", id: "fairfield_california" },
-    { city: "West Covina, California", id: "west_covina_california" },
-    { city: "Billings, Montana", id: "billings_montana" },
-    { city: "Murrieta, California", id: "murrieta_california" },
-    { city: "High Point, North Carolina", id: "high_point_north_carolina" },
-    { city: "Round Rock, Texas", id: "round_rock_texas" },
-    { city: "Richmond, California", id: "richmond_california" },
-    { city: "Cambridge, Massachusetts", id: "cambridge_massachusetts" },
-    { city: "Norwalk, California", id: "norwalk_california" },
-    { city: "Odessa, Texas", id: "odessa_texas" },
-    { city: "Antioch, California", id: "antioch_california" },
-    { city: "Temecula, California", id: "temecula_california" },
-    { city: "Green Bay, Wisconsin", id: "green_bay_wisconsin" },
-    { city: "Everett, Washington", id: "everett_washington" },
-    { city: "Wichita Falls, Texas", id: "wichita_falls_texas" },
-    { city: "Burbank, California", id: "burbank_california" },
-    { city: "Palm Bay, Florida", id: "palm_bay_florida" },
-    { city: "Centennial, Colorado", id: "centennial_colorado" },
-    { city: "Daly City, California", id: "daly_city_california" },
-    { city: "Richardson, Texas", id: "richardson_texas" },
-    { city: "Pompano Beach, Florida", id: "pompano_beach_florida" },
-    { city: "Broken Arrow, Oklahoma", id: "broken_arrow_oklahoma" },
-    { city: "North Charleston, South Carolina", id: "north_charleston_south_carolina" },
-    { city: "West Palm Beach, Florida", id: "west_palm_beach_florida" },
-    { city: "Boulder, Colorado", id: "boulder_colorado" },
-    { city: "Rialto, California", id: "rialto_california" },
-    { city: "Santa Maria, California", id: "santa_maria_california" },
-    { city: "El Cajon, California", id: "el_cajon_california" },
-    { city: "Davenport, Iowa", id: "davenport_iowa" },
-    { city: "Las Cruces, New Mexico", id: "las_cruces_new_mexico" },
-    { city: "Erie, Pennsylvania", id: "erie_pennsylvania" },
-    { city: "South Bend, Indiana", id: "south_bend_indiana" },
-    { city: "Flint, Michigan", id: "flint_michigan" },
-    { city: "Kenosha, Wisconsin", id: "kenosha_wisconsin" },
-    { city: "Lakeland, Florida", id: "lakeland_florida" },
-    { city: "San Mateo, California", id: "san_mateo_california" },
-    { city: "Lewisville, Texas", id: "lewisville_texas" },
-    { city: "Sandy Springs, Georgia", id: "sandy_springs_georgia" },
-    { city: "Tyler, Texas", id: "tyler_texas" },
-    { city: "Clovis, California", id: "clovis_california" },
-    { city: "Lawton, Oklahoma", id: "lawton_oklahoma" },
-    { city: "Albany, New York", id: "albany_new_york" },
-    { city: "College Station, Texas", id: "college_station_texas" },
-    { city: "Compton, California", id: "compton_california" },
-    { city: "Roanoke, Virginia", id: "roanoke_virginia" },
-];
+                var el = "<td class='" + data.id + "'>" + value + "</td>;"
+                $(el).appendTo("#" + ids[i]);
+            }
+        });  
+    };
 
-  function addCity(city) {
-    fetchCityData(city.id);
-  };
+    function addCity(city) {
+        fetchCityData(city.id);
+    };
 
-  function deleteCity(city) {
-    $("." + city.id).remove(); 
-  };
+    function deleteCity(city) {
+        $("." + city.id).remove(); 
+    };
 
-  options = { 
-    hintText: "Type in a city", 
-    animateDropdown: false,
-    searchDelay: 100,
-    tokenLimit: 4,
-    resultsLimit: 5,
-    preventDuplicates: true,
-    propertyToSearch: "city",
-    onAdd: addCity,
-    onDelete: deleteCity
-  };
+    $.getJSON("data/majorcities.json", function(cities) {
+        options = { 
+            hintText: "Type in a city", 
+            animateDropdown: false,
+            searchDelay: 100,
+            tokenLimit: 4,
+            resultsLimit: 5,
+            preventDuplicates: true,
+            propertyToSearch: "display",
+            onAdd: addCity,
+            onDelete: deleteCity,
+        };
 
-  $("#searchbar").tokenInput(cities, options);
+        $("#searchbar").tokenInput(cities, options);
+    });
 });
-
