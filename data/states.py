@@ -24,6 +24,10 @@ def abbreviationToName(abbreviation):
 def nameToAbbrevation(name):
     return NAME_TO_ABBREVIATION.get(name)
 
+def getStatesByName():
+    return NAME_TO_ABBREVIATION.keys() 
+
 if __name__ == "__main__":
     print nameToAbbrevation("Florida")
     print abbreviationToName("FL")
+    print getStatesByName()
