@@ -21,9 +21,13 @@ def loadCity(city, state):
     try:
         filename = REPORT_PATH % state
         reports = json.load(open(filename))
-        return findCity(city, reports)
+        report =findCity(city, reports)
+        if report:
+            return report
     except IOError:
-        raise LookupError(city)
+        pass
+
+    raise LookupError(city)
         
 if __name__ == "__main__":
     print loadCity("Miami", "FL")
