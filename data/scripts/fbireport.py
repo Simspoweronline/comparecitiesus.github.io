@@ -3,7 +3,7 @@ import cities
 from xlrd import open_workbook
 import os
 
-REPORT_PATH = "fbi/Table_8_Offenses_Known_to_Law_Enforcement_by_%s_by_City_2012.xls"
+REPORT_PATH = "../fbi/Table_8_Offenses_Known_to_Law_Enforcement_by_%s_by_City_2012.xls"
 
 FIELDS = [
     "name", "population", "violent crime",

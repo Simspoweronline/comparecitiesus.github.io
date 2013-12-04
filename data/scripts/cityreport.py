@@ -3,7 +3,7 @@ import fbireport
 import sbareport
 import json
 
-REPORT_PATH = "cities/%s.json"
+REPORT_PATH = "../cities/%s.json"
 
 def generateAll():
     for currentCity in cities.MAJOR_CITIES:

@@ -4,7 +4,7 @@ import json
 import urllib2
 
 BASE_URL = "http://api.sba.gov/geodata/city_data_for_state_of/%s.json"
-REPORT_PATH = "sba/%s.json"
+REPORT_PATH = "../sba/%s.json"
 
 def downloadStateReport(state, filename):
     stateUrl = BASE_URL % state
@@ -22,8 +22,10 @@ def loadCity(city, state):
         filename = REPORT_PATH % state
         reports = json.load(open(filename))
         report =findCity(city, reports)
+
         if report:
             return report
+
     except IOError:
         pass
 

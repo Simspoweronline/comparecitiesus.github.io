@@ -1,7 +1,7 @@
 import json 
 import re
 
-CITIES_FILENAME = "majorcities.json"
+CITIES_FILENAME = "../cities/majorcities.json"
 MAJOR_CITIES = json.load(open(CITIES_FILENAME))
 
 def sanitizeName(name):
