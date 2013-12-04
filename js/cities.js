@@ -19,11 +19,11 @@ $(document).ready(function() {
         $.getJSON(cityUrl, function(data) {
             $("#cities").show();
 
-            var ids = ["city-name", "city-population", "city-violent-crime",
+            var ids = ["city-name", "city-website", "county-name", "city-population", "city-violent-crime",
             "city-rape", "city-murders", "city-robbery", 
             "city-vehicle-theft"];
 
-            var fields = ["name", "population", "violent crime",
+            var fields = ["full_name", "url", "county_name", "population", "violent crime",
             "forcible rape", "murder and nonnegligent manslaughter",
             "robbery", "vehicle-theft"];
 
@@ -31,11 +31,14 @@ $(document).ready(function() {
                 var property = fields[i];
                 var value = data[property]
 
+                if (value === undefined) {
+                    value = "";
+                }
                 if (typeof value === "number") {
                     value = addCommas(value);
                 }
-                else if(property == "name") {
-                    value = "<a href='" +  data["url"] + "'>" + value + "</a>";
+                else if(property == "url" && value) {
+                    value = "<a href='" +  value  + "'>" + value + "</a>";
                 }
 
                 var el = "<td class='" + data.id + "'>" + value + "</td>;"
