@@ -52,7 +52,7 @@ $(document).ready(function() {
         $("." + city.id).remove(); 
     };
 
-    $.getJSON("data/majorcities.json", function(cities) {
+    $.getJSON("data/cities/majorcities.json", function(cities) {
         options = { 
             hintText: "Type in a city", 
             animateDropdown: false,
