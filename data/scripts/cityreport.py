@@ -13,17 +13,22 @@ def generateAll():
         report = {}
 
         try:
-            report.update(fbireport.loadCity(city, state))
+            fbi = fbireport.loadCity(city, state) 
+            report.update((k, v) for k, v in fbi.iteritems() if v is not None)
         except LookupError:
             print city, state
 
         try:
-            report.update(sbareport.loadCity(city, state))
+            sba = sbareport.loadCity(city, state)
+            report.update((k, v) for k, v in sba.iteritems() if v is not None)
         except LookupError:
             print city, state
 
         if report:
             report["id"] = currentCity["id"]
+            report["name"] = city
+            report["state"] = state
+            report["full_name"] = "%s, %s" % (city, state) 
             filename = REPORT_PATH % report["id"]
             cityFile = open(filename, "w")
             json.dump(report, cityFile)

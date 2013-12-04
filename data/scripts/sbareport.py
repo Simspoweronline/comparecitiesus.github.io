@@ -21,7 +21,7 @@ def loadCity(city, state):
     try:
         filename = REPORT_PATH % state
         reports = json.load(open(filename))
-        report =findCity(city, reports)
+        report = findCity(city, reports)
 
         if report:
             return report
