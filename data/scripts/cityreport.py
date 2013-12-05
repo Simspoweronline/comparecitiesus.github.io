@@ -1,6 +1,7 @@
 import cities
 import fbireport
 import sbareport
+import airports
 import json
 
 REPORT_PATH = "../cities/%s.json"
@@ -13,16 +14,22 @@ def generateAll():
         report = {}
 
         try:
+            air  = airports.loadCity(city, state) 
+            report.update((k, v) for k, v in air.iteritems() if v is not None)
+        except LookupError:
+            print "air", city, state
+
+        try:
             fbi = fbireport.loadCity(city, state) 
             report.update((k, v) for k, v in fbi.iteritems() if v is not None)
         except LookupError:
-            print city, state
+            print "fbi", city, state
 
         try:
             sba = sbareport.loadCity(city, state)
             report.update((k, v) for k, v in sba.iteritems() if v is not None)
         except LookupError:
-            print city, state
+            print "sba", city, state
 
         if report:
             report["id"] = currentCity["id"]

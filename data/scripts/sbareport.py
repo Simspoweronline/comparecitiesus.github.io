@@ -6,6 +6,12 @@ import urllib2
 BASE_URL = "http://api.sba.gov/geodata/city_data_for_state_of/%s.json"
 REPORT_PATH = "../sba/%s.json"
 
+FIELDS = [
+    u'link_title', u'description', u'fips_class', u'url', 
+    u'feature_id', u'state_name', u'fips_county_cd', 
+    u'state_abbreviation', u'full_county_name', u'county_name', 
+    u'feat_class', u'primary_latitude', u'primary_longitude', u'name']
+
 def downloadStateReport(state, filename):
     stateUrl = BASE_URL % state
     report = json.load(urllib2.urlopen(stateUrl))
@@ -32,5 +38,4 @@ def loadCity(city, state):
     raise LookupError(city)
         
 if __name__ == "__main__":
-    print loadCity("Miami", "FL")
-    print loadCity("Chicago", "IL")
+    print loadCity("Miami", "FL").keys()

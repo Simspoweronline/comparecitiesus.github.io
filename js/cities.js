@@ -19,11 +19,11 @@ $(document).ready(function() {
         $.getJSON(cityUrl, function(data) {
             $("#cities").show();
 
-            var ids = ["city-name", "city-website", "county-name", "city-population", "city-violent-crime",
+            var ids = ["city-name", "city-website", "county-name", "city-population", "airport", "city-violent-crime",
             "city-rape", "city-murders", "city-robbery", 
             "city-vehicle-theft"];
 
-            var fields = ["full_name", "url", "county_name", "population", "violent crime",
+            var fields = ["full_name", "url", "county_name", "population", "airports", "violent crime", 
             "forcible rape", "murder and nonnegligent manslaughter",
             "robbery", "vehicle-theft"];
 
@@ -39,6 +39,9 @@ $(document).ready(function() {
                 }
                 else if(property == "url" && value) {
                     value = "<a href='" +  value  + "'>" + value + "</a>";
+                }
+                else if(property == "airports" && value) {
+                    value = value[0]["airport"] + " (" + value[0]["IATA"]+ ")"  
                 }
 
                 var el = "<td class='" + data.id + "'>" + value + "</td>;"
