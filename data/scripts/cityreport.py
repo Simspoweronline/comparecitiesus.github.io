@@ -3,6 +3,7 @@ import fbireport
 import sbareport
 import airports
 import json
+import climatereport
 
 REPORT_PATH = "../cities/%s.json"
 
@@ -30,6 +31,12 @@ def generateAll():
             report.update((k, v) for k, v in sba.iteritems() if v is not None)
         except LookupError:
             print "sba", city, state
+
+        try:
+            climate = climatereport.loadCity(report)
+            report.update((k, v) for k, v in climate.iteritems() if v is not None)
+        except LookupError:
+            print "climate", city, state
 
         if report:
             report["id"] = currentCity["id"]
