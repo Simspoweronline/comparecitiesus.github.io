@@ -1,3 +1,15 @@
+.months {
+  text-align: right;
+}
+
+.temp-min {
+  color: blue;
+}
+
+.temp-max {
+  color: red;
+}
+
 #header {
   background: #f8f8f8;
 }

@@ -47,6 +47,14 @@ $(document).ready(function() {
                 var el = "<td class='" + data.id + "'>" + value + "</td>;"
                 $(el).appendTo("#" + ids[i]);
             }
+
+            var months = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
+
+            for (var i = 0; i < 12; i++) {
+                value = data["climate"][i]
+                var el = "<td class='" + data.id + "'>" + "<div class='temp-min'>" + value[0] + "</div><div class='temp-max'>" + value[1] + "</div></td>;"
+                $(el).appendTo("#" + months[i]);
+            }
         });  
     };
 
